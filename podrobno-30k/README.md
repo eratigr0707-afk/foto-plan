@@ -1,0 +1,104 @@
+# План фото каталога «ЭнергоКабель Казахстан» — 29 300 подкадров
+
+«ЭнергоКабель Казахстан» продает кабель, провод и электротехническое оборудование со складов в 10 городах Казахстана. В каталоге сайта 942 384 позиции в 29 разделах: кабель и провод, низковольтное оборудование, подшипники, ремни, лотки, светильники, двигатели, насосы, инструмент и многое другое.
+
+Сейчас у большинства позиций нет фото. Снимать каждую из 942 384 позиций невозможно и не нужно: многие позиции на фото выглядят одинаково (кабель одной конструкции разных марок, подшипники одного типа и размера, ремни одного профиля). Поэтому позиции собраны в группы по **видимым** характеристикам, и на каждую группу нужен один типовой снимок. Этот репозиторий — план таких снимков: что должно быть в кадре, подробное описание для фотографа или нейросети, готовый промпт на английском и негатив-промпт.
+
+Это **вариант 2 (уровень 2)** — подробный план: 29 300 подкадров вместо 4 522 кадров. Он нужен,
+чтобы у похожих, но заметно разных позиций фото были разными: кабель на 3 и на 5 жил, подшипник узкий и широкий,
+ремень короткий и длинный.
+
+## Сначала уровень 1
+
+Каждый подкадр принадлежит кадру уровня 1 (колонка «Кадр (parent)», например `F00001-a` → `F00001`).
+**Порядок работ:** сначала снимки кадров уровня 1 (список — `data/kadry-uroven-1.csv`, полные описания — в
+пакете «foto-plan-4522»), потом подкадры по приоритету. Снимок подкадра делается **от готового снимка кадра**:
+тот же ракурс, свет и фон, меняется только отличие подкадра. Пока снимка подкадра нет, на его позиции встает
+снимок кадра — сайт не останется без фото.
+
+## Сколько снимков нужно
+
+Всего подкадров — 29 300; **свой снимок нужен 26 584**:
+
+- 1 131 подкадр «весь кадр» — кадр не делится, снимок кадра подходит всем
+  его позициям;
+- 1 585 подкадров «прочие позиции кадра» — позиции без общего
+  заметного отличия, на них встает снимок кадра.
+
+| Доля позиций каталога с фото | 50 % | 80 % | 90 % | 95 % | 99 % | 100 % |
+|---|---|---|---|---|---|---|
+| Подкадров (по убыванию массовости) | 1 281 | 7 998 | 14 609 | 20 144 | 26 525 | 29 300 |
+| Для сравнения: кадров уровня 1 | 89 | 689 | 1 454 | 2 211 | 3 263 | 4 522 |
+
+По разделам — `data/coverage.csv`.
+
+## Как устроен план
+
+- **Кадр (уровень 1)** — группа позиций, которые выглядят одинаково (подробно — [GROUPS.md](GROUPS.md)).
+- **Подкадр (уровень 2)** — часть кадра с общим заметным отличием. Код — код кадра + буквы: `F00001-a`,
+  `F00001-b` … `F00001-bz`. Коды постоянные; код = имя файла снимка.
+- **Отличие подкадра** — что на снимке должно отличаться от соседних подкадров (точное число жил, сечение,
+  цвет оболочки, размер, профиль …); те же признаки — отдельными колонками.
+- **Приоритет** 1–5 — по накопленному покрытию (1 — первые 50 % позиций, 2 — до 80 %, 3 — до 95 %,
+  4 — до 99 %, 5 — остальное); **Ранг** — место подкадра по числу позиций.
+
+## Файлы
+
+| Файл | Что внутри |
+|---|---|
+| `GROUPS.md` | группы и подгруппы по разделам: признаки, как делятся кадры, примеры |
+| `STYLE.md` | единые требования к снимку |
+| `CONTRIBUTING.md` | как взять подкадр в работу и сдать снимок |
+| `LICENSE-NOTE.md` | права на тексты и присланные фото (шаблон) |
+| `data/kadry-uroven-1.csv` | 4 522 кадра уровня 1 (коротко, без длинных описаний) |
+| `data/coverage.csv` | покрытие по разделам: подкадров для 50/80/90/95/99/100 % позиций |
+| `photos/` | сюда сдаются готовые снимки `<код>.webp` |
+
+Подкадры лежат по разделам — CSV (UTF-8 с BOM, «;», открывается в Excel) и копия JSON (массив, один подкадр
+на строку). Каждый файл меньше 50 МБ; большой раздел разбит на части.
+
+| Файлы | Раздел |
+|---|---|
+| `data/csv/01-kabel-i-provod-1.csv` · `data/json/01-kabel-i-provod-1.json` | Кабель и провод |
+| `data/csv/01-kabel-i-provod-2.csv` · `data/json/01-kabel-i-provod-2.json` | Кабель и провод |
+| `data/csv/02-podshipniki.csv` · `data/json/02-podshipniki.json` | Подшипники |
+| `data/csv/03-remni.csv` · `data/json/03-remni.json` | Ремни |
+| `data/csv/04-nizkovoltnoe-oborudovanie.csv` · `data/json/04-nizkovoltnoe-oborudovanie.json` | Низковольтное оборудование |
+| `data/csv/05-skladskoe-oborudovanie.csv` · `data/json/05-skladskoe-oborudovanie.json` | Складское оборудование |
+| `data/csv/06-lotki-i-kabelenesuschie-sistemy.csv` · `data/json/06-lotki-i-kabelenesuschie-sistemy.json` | Лотки и кабеленесущие системы |
+| `data/csv/07-montazhnye-izdeliya-dlya-kabelya.csv` · `data/json/07-montazhnye-izdeliya-dlya-kabelya.json` | Монтажные изделия для кабеля |
+| `data/csv/08-svetilniki.csv` · `data/json/08-svetilniki.json` | Светильники |
+| `data/csv/09-stanki-i-oborudovanie.csv` · `data/json/09-stanki-i-oborudovanie.json` | Станки и оборудование |
+| `data/csv/10-nasosy.csv` · `data/json/10-nasosy.json` | Насосы |
+| `data/csv/11-elektrodvigateli.csv` · `data/json/11-elektrodvigateli.json` | Электродвигатели |
+| `data/csv/12-truboprovodnaya-armatura.csv` · `data/json/12-truboprovodnaya-armatura.json` | Трубопроводная арматура |
+| `data/csv/13-instrument.csv` · `data/json/13-instrument.json` | Инструмент |
+| `data/csv/14-reduktory.csv` · `data/json/14-reduktory.json` | Редукторы |
+| `data/csv/15-osvetitelnoe-oborudovanie.csv` · `data/json/15-osvetitelnoe-oborudovanie.json` | Осветительное оборудование |
+| `data/csv/16-stroitelnoe-oborudovanie.csv` · `data/json/16-stroitelnoe-oborudovanie.json` | Строительное оборудование |
+| `data/csv/17-shkivy.csv` · `data/json/17-shkivy.json` | Шкивы |
+| `data/csv/18-kabelnye-mufty.csv` · `data/json/18-kabelnye-mufty.json` | Кабельные муфты |
+| `data/csv/19-zvezdochki.csv` · `data/json/19-zvezdochki.json` | Звездочки |
+| `data/csv/20-konveyernye-lenty.csv` · `data/json/20-konveyernye-lenty.json` | Конвейерные ленты |
+| `data/csv/21-opory-i-stoyki.csv` · `data/json/21-opory-i-stoyki.json` | Опоры и стойки |
+| `data/csv/22-ventilyatory.csv` · `data/json/22-ventilyatory.json` | Вентиляторы |
+| `data/csv/23-rukava.csv` · `data/json/23-rukava.json` | Рукава |
+| `data/csv/24-gidravlika.csv` · `data/json/24-gidravlika.json` | Гидравлика |
+| `data/csv/25-vysokovoltnoe-oborudovanie.csv` · `data/json/25-vysokovoltnoe-oborudovanie.json` | Высоковольтное оборудование |
+| `data/csv/26-tsepi.csv` · `data/json/26-tsepi.json` | Цепи |
+| `data/csv/27-navesnoe-oborudovanie.csv` · `data/json/27-navesnoe-oborudovanie.json` | Навесное оборудование |
+| `data/csv/28-videonablyudenie.csv` · `data/json/28-videonablyudenie.json` | Видеонаблюдение |
+| `data/csv/29-teplotehnika.csv` · `data/json/29-teplotehnika.json` | Теплотехника |
+
+Колонки CSV: код подкадра · кадр (parent) · приоритет · ранг · раздел · группа кадра · вид изделия ·
+признаки кадра («кадр: …») · отличие подкадра · признаки подкадра отдельными колонками (у каждого раздела
+свои: у кабеля — жилы, сечение, оболочка, экран, броня, цвет оболочки, раскраска жил …) · тип подкадра · позиций ·
+описание RU · промпт EN · негатив EN · негатив RU · метод · как сделать · имя файла. JSON: `code, parent,
+priority, rank, section, group, kind, frame_features, difference, subframe_features, subframe_type, positions,
+description_ru, prompt_en, negative_en, negative_ru, method, how_to, file, uses_file`.
+
+## С чего начать
+
+1. [STYLE.md](STYLE.md) — требования к серии.
+2. Кадры уровня 1 с приоритетом 1 (если их снимков еще нет).
+3. Подкадры с приоритетом 1 и типом «свой снимок» — по [CONTRIBUTING.md](CONTRIBUTING.md).
